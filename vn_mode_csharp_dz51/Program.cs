@@ -14,49 +14,56 @@ class Program
             new Criminal("Смирнов Алейсей Владимирович", false, 175, 75, "Русский"),
         };
 
-        int height;
-        bool isValidHeight;
+        int height = ReadValidInteger("Введите рост:");
+        int weight = ReadValidInteger("Введите вес:");
+        string nationality = ReadInput("Введите национальность:");
+
+        var result = FindMatchingCriminals(criminals, height, weight, nationality);
+
+        DisplayResults(result);
+
+        Console.ReadLine();
+    }
+
+    static int ReadValidInteger(string message)
+    {
+        int value;
+        bool isValidInput;
 
         do
         {
-            Console.WriteLine("Введите рост:");
-            isValidHeight = int.TryParse(Console.ReadLine(), out height);
+            Console.WriteLine(message);
+            isValidInput = int.TryParse(Console.ReadLine(), out value);
 
-            if (!isValidHeight)
+            if (!isValidInput)
             {
-                Console.WriteLine("Некорректный ввод. Пожалуйста, введите целое число для роста.");
+                Console.WriteLine("Некорректный ввод. Пожалуйста, введите целое число.");
             }
 
-        } while (!isValidHeight);
+        } while (!isValidInput);
 
-        int weight;
-        bool isValidWeight;
+        return value;
+    }
 
-        do
-        {
-            Console.WriteLine("Введите вес:");
-            isValidWeight = int.TryParse(Console.ReadLine(), out weight);
+    static string ReadInput(string message)
+    {
+        Console.WriteLine(message);
+        return Console.ReadLine();
+    }
 
-            if (!isValidWeight)
-            {
-                Console.WriteLine("Некорректный ввод. Пожалуйста, введите целое число для веса.");
-            }
+    static IEnumerable<Criminal> FindMatchingCriminals(List<Criminal> criminals, int height, int weight, string nationality)
+    {
+        return criminals.Where(criminal => !criminal.IsInPrison && criminal.Height == height && criminal.Weight == weight && criminal.Nationality == nationality);
+    }
 
-        } while (!isValidWeight);
-
-        Console.WriteLine("Введите национальность:");
-        string nationality = Console.ReadLine();
-
-        var result = criminals.Where(criminal => !criminal.IsInPrison && criminal.Height == height && criminal.Weight == weight && criminal.Nationality == nationality);
-
+    static void DisplayResults(IEnumerable<Criminal> criminals)
+    {
         Console.WriteLine("Результат:");
 
-        foreach (var criminal in result)
+        foreach (var criminal in criminals)
         {
             Console.WriteLine(criminal.FullName);
         }
-
-        Console.ReadLine();
     }
 }
 
