@@ -14,16 +14,40 @@ class Program
             new Criminal("Смирнов Алейсей Владимирович", false, 175, 75, "Русский"),
         };
 
-        Console.WriteLine("Введите рост:");
-        int height = Convert.ToInt32(Console.ReadLine());
+        int height;
+        bool isValidHeight;
 
-        Console.WriteLine("Введите вес:");
-        int weight = Convert.ToInt32(Console.ReadLine());
+        do
+        {
+            Console.WriteLine("Введите рост:");
+            isValidHeight = int.TryParse(Console.ReadLine(), out height);
+
+            if (!isValidHeight)
+            {
+                Console.WriteLine("Некорректный ввод. Пожалуйста, введите целое число для роста.");
+            }
+
+        } while (!isValidHeight);
+
+        int weight;
+        bool isValidWeight;
+
+        do
+        {
+            Console.WriteLine("Введите вес:");
+            isValidWeight = int.TryParse(Console.ReadLine(), out weight);
+
+            if (!isValidWeight)
+            {
+                Console.WriteLine("Некорректный ввод. Пожалуйста, введите целое число для веса.");
+            }
+
+        } while (!isValidWeight);
 
         Console.WriteLine("Введите национальность:");
         string nationality = Console.ReadLine();
 
-        var result = criminals.Where(c => !c.IsInPrison && c.Height == height && c.Weight == weight && c.Nationality == nationality);
+        var result = criminals.Where(criminal => !criminal.IsInPrison && criminal.Height == height && criminal.Weight == weight && criminal.Nationality == nationality);
 
         Console.WriteLine("Результат:");
 
@@ -38,11 +62,11 @@ class Program
 
 class Criminal
 {
-    public string FullName { get; set; }
-    public bool IsInPrison { get; set; }
-    public int Height { get; set; }
-    public int Weight { get; set; }
-    public string Nationality { get; set; }
+    public string FullName { get; }
+    public bool IsInPrison { get; }
+    public int Height { get; }
+    public int Weight { get; }
+    public string Nationality { get; }
 
     public Criminal(string fullName, bool isInPrison, int height, int weight, string nationality)
     {
